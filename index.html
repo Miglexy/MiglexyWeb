@@ -1,258 +1,396 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miglexy Web</title>
-    <style>
-        /* --- ESTILIZAÇÃO DO FUNDO E FONTE --- */
-        body {
-            background-color: #f0f4f8; 
-            /* Se for usar imagem de fundo no GitHub, mude o nome do arquivo abaixo: */
-            background-image: url(fundo.png); */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 320px 1fr 300px;
-            grid-template-rows: auto 1fr auto;
-            gap: 20px;
-            height: 100vh;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* --- TOPO (NOME DO SITE) --- */
-        header {
-            grid-column: 1 / -1;
-            text-align: personagem.gifcenter;
-            padding: 10px;
-        }
+<title>Miglexy Web</title>
 
-        header h1 {
-            color: #ff4a5a; 
-            font-size: 2.5rem;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
 
-        /* --- BARRA LATERAL (LISTA DE JOGOS) --- */
-        aside {
-            grid-column: 1;
-            background: rgba(49, 48, 48, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
-            overflow-y: auto; /* Permite rolar a lista se você adicionar muitos jogos */
-        }
+body{
+background:url("fundo.png") center center fixed;
+background-size:cover;
+color:white;
+min-height:100vh;
+}
 
-        aside h2 {
-            color: #ff4a5a;
-            font-size: 1.5rem;
-            margin-top: 0;
-            border-bottom: 2px solid #ff4a5a;
-            padding-bottom: 8px;
-        }
+.overlay{
+background:rgba(0,0,0,.75);
+min-height:100vh;
+padding:25px;
+}
 
-        aside ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+header{
+text-align:center;
+margin-bottom:25px;
+}
 
-        aside li {
-            margin-bottom: 18px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #eee;
-        }
+header h1{
+font-size:3rem;
+text-shadow:0 0 15px #00aaff;
+}
 
-        aside a {
-            text-decoration: none;
-            color: #222;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 4px;
-            transition: color 0.2s;
-        }
+header p{
+opacity:.8;
+margin-top:8px;
+}
 
-        aside a:hover {
-            color: #ff4a5a;
-        }
+.layout{
+display:grid;
+grid-template-columns:220px 1fr 250px;
+gap:20px;
+}
 
-        aside span {
-            font-size: 0.85rem;
-            color: #666;
-            display: block;
-            line-height: 1.3;
-        }
+.panel{
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,.1);
+border-radius:15px;
+padding:15px;
+}
 
-        /* --- CONTEÚDO CENTRAL (TEXTOS) --- */
-        main {
-            grid-column: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            justify-content: flex-start;
-            padding: 10px;
-        }
+.sidebar h2{
+margin-bottom:10px;
+}
 
-        .texto-box {
-            background: rgba(70, 65, 65, 0.85);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            color: #ff4a5a;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
+.sidebar button{
+width:100%;
+margin-bottom:8px;
+padding:10px;
+background:#111827;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
+transition:.2s;
+}
 
-        /* --- LATERAL DIREITA (GIF PERSONAGEM) --- */
-        .sidebar-right {
-            grid-column: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.sidebar button:hover{
+background:#1f2937;
+}
 
-        .container-gif {
-            width: 100%;
-            max-width: 250px;
-            height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.search{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-bottom:15px;
+background:#111827;
+color:white;
+}
 
-        .container-gif img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+.games{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:15px;
+}
 
-        /* --- RODAPÉ (CAIXA DE SOM) --- */
-        footer {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 10px;
-        }
+.card{
+background:rgba(255,255,255,.08);
+border-radius:15px;
+overflow:hidden;
+transition:.3s;
+border:1px solid rgba(255,255,255,.1);
+}
 
-        .caixa-som-btn {
-            cursor: pointer;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 15px rgba(0,170,255,.4);
+}
 
-        .caixa-som-btn:hover {
-            transform: scale(1.1);
-        }
+.card img{
+width:100%;
+height:150px;
+object-fit:cover;
+}
 
-        .caixa-som-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-    </style>
+.card-content{
+padding:15px;
+}
+
+.card h3{
+margin-bottom:8px;
+}
+
+.card p{
+font-size:.9rem;
+opacity:.8;
+margin-bottom:12px;
+}
+
+.card a{
+display:inline-block;
+padding:10px 15px;
+background:#00aaff;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+.right{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.character{
+text-align:center;
+}
+
+.character img{
+width:100%;
+animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0px);}
+}
+
+.music{
+text-align:center;
+}
+
+.music img{
+width:130px;
+cursor:pointer;
+transition:.2s;
+}
+
+.music img:hover{
+transform:scale(1.05);
+}
+
+.music button{
+margin-top:10px;
+padding:10px 15px;
+border:none;
+border-radius:10px;
+background:#00aaff;
+color:white;
+cursor:pointer;
+}
+
+.footer{
+text-align:center;
+margin-top:30px;
+opacity:.6;
+}
+
+@media(max-width:900px){
+.layout{
+grid-template-columns:1fr;
+}
+}
+</style>
 </head>
 <body>
 
-    <audio id="musica-fundo" src="musica.mp3" loop></audio>
+<div class="overlay">
 
-    <header>
-        <h1>Miglexy Web</h1>
-    </header>
+<header>
+<h1>Miglexy Games</h1>
+<p>Jogos online, emuladores e coisas aleatórias.</p>
+</header>
 
-    <aside>
-        <h2>Lista de Jogos</h2>
-        <ul>
-            
-            <li>
-                <a href="https://fnafgame.io/" target="_blank">Five Nights at Freddy's</a>
-                <span>Jogo de sobrevivência e terror na pizzaria.</span>
-            </li>
+<div class="layout">
 
-            <li>
-                <a href="https://quenq.com/#google_vignette" target="_blank">Quenq</a>
-                <span>Portal com vários mini-jogos casuais para navegador.</span>
-            </li>
+<div class="panel sidebar">
 
-            <li>
-                <a href="https://neal.fun/" target="_blank">Neal.fun</a>
-                <span>Coleção de jogos interativos, curiosidades e experimentos legais.</span>
-            </li>
+<h2>Categorias</h2>
 
-            <li>
-                <a href="https://emulatorjs.com/" target="_blank">EmulatorJS</a>
-                <span>Emulador para rodar jogos clássicos de consoles antigos na web.</span>
-            </li>
+<button onclick="mostrarCategoria('todos')">Todos</button>
+<button onclick="mostrarCategoria('jogos')">Jogos</button>
+<button onclick="mostrarCategoria('sandbox')">Sandbox</button>
+<button onclick="mostrarCategoria('extras')">Extras</button>
 
-            <li>
-                <a href="https://totaljerkface.com/happy_wheels.tjf" target="_blank">Happy Wheels</a>
-                <span>O clássico jogo de corrida com obstáculos e física maluca.</span>
-            </li>
+</div>
 
-            <li>
-                <a href="https://www.crazycattle.org/index.html" target="_blank">Crazy Cattle</a>
-                <span>Jogos e projetos indie em flash/HTML5.</span>
-            </li>
+<div class="panel">
 
-            <li>
-                <a href="https://cookieclicker.eu/cookieclicker/" target="_blank">Cookie Clicker</a>
-                <span>O famoso jogo de clicar no biscoito e comprar melhorias.</span>
-            </li>
+<input
+class="search"
+id="pesquisa"
+placeholder="Pesquisar jogo..."
+oninput="renderizarJogos()">
 
-            <li>
-                <a href="https://eaglercraftx.pages.dev/" target="_blank">Eaglercraft (Minecraft Web)</a>
-                <span>Versão do Minecraft que roda direto pelo navegador.</span>
-            </li>
+<div class="games" id="games"></div>
 
-            </ul>
-    </aside>
+</div>
 
-    <main>
-        <div class="texto-box">
-            Aqui vai o seu primeiro bloco de texto explicativo ou introdução do site.
-        </div>
-        <div class="texto-box">
-            Aqui fica o segundo bloco de texto, conforme desenhado no seu modelo.
-        </div>
-    </main>
+<div class="right">
 
-    <div class="sidebar-right">
-        <div class="container-gif">
-            <img id="gif-personagem" src="personagem.gif" alt="GIF Personagem">
-        </div>
-    </div>
+<div class="panel character">
+<h2>Niko</h2>
+<img src="personagem.gif">
+</div>
 
-    <footer>
-        <div class="caixa-som-btn" onclick="controlarMusica()" title="Clique para ligar/desligar a música">
-            <img id="gif-caixa" src="caixadesom.gif" alt="Caixa de Som">
-        </div>
-    </footer>
+<div class="panel music">
 
-    <script>
-        const musica = document.getElementById('musica-fundo');
-        
-        function controlarMusica() {
-            if (musica.paused) {
-                musica.play();
-                console.log("Música ligada!");
-            } else {
-                musica.pause();
-                console.log("Música pausada!");
-            }
-        }
-    </script>
+<h2>Música</h2>
+
+<img src="caixadesom.gif" onclick="toggleMusic()">
+
+<br>
+
+<button onclick="toggleMusic()">
+Tocar / Pausar
+</button>
+
+<audio id="music" loop>
+<source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+Feito por Miglexy
+</div>
+
+</div>
+
+<script>
+
+const jogos = [
+
+{
+nome:"Five Nights at Freddy's",
+descricao:"Versão online inspirada em FNAF.",
+categoria:"jogos",
+imagem:"https://placehold.co/400x200?text=FNAF",
+link:"https://fnafgame.io/"
+},
+
+{
+nome:"Quenq",
+descricao:"Coleção de jogos e experiências online.",
+categoria:"extras",
+imagem:"https://placehold.co/400x200?text=QUENQ",
+link:"https://quenq.com/#google_vignette"
+},
+
+{
+nome:"Neal.fun",
+descricao:"Experimentos, curiosidades e minigames.",
+categoria:"extras",
+imagem:"https://placehold.co/400x200?text=NEAL.FUN",
+link:"https://neal.fun/"
+},
+
+{
+nome:"EmulatorJS",
+descricao:"Emuladores retrô direto no navegador.",
+categoria:"sandbox",
+imagem:"https://placehold.co/400x200?text=EMULATORJS",
+link:"https://emulatorjs.com/"
+},
+
+{
+nome:"Happy Wheels",
+descricao:"Clássico jogo de física e caos.",
+categoria:"jogos",
+imagem:"https://placehold.co/400x200?text=HAPPY+WHEELS",
+link:"https://totaljerkface.com/happy_wheels.tjf"
+},
+
+{
+nome:"Crazy Cattle 3D",
+descricao:"Caos absoluto com animais explosivos.",
+categoria:"jogos",
+imagem:"https://placehold.co/400x200?text=CRAZY+CATTLE",
+link:"https://www.crazycattle.org/index.html"
+},
+
+{
+nome:"Cookie Clicker",
+descricao:"Clique em biscoitos e domine o universo.",
+categoria:"jogos",
+imagem:"https://placehold.co/400x200?text=COOKIE+CLICKER",
+link:"https://cookieclicker.eu/cookieclicker/"
+},
+
+{
+nome:"Eaglercraft",
+descricao:"Minecraft no navegador.",
+categoria:"sandbox",
+imagem:"https://placehold.co/400x200?text=EAGLERCRAFT",
+link:"https://eaglercraftx.pages.dev/"
+}
+
+];
+
+let categoriaAtual = "todos";
+
+function mostrarCategoria(cat){
+categoriaAtual = cat;
+renderizarJogos();
+}
+
+function renderizarJogos(){
+
+const container = document.getElementById("games");
+const pesquisa = document.getElementById("pesquisa").value.toLowerCase();
+
+container.innerHTML = "";
+
+const filtrados = jogos.filter(j => {
+
+const categoriaOk =
+categoriaAtual === "todos" ||
+j.categoria === categoriaAtual;
+
+const textoOk =
+j.nome.toLowerCase().includes(pesquisa);
+
+return categoriaOk && textoOk;
+
+});
+
+filtrados.forEach(jogo=>{
+
+container.innerHTML += `
+<div class="card">
+<img src="${jogo.imagem}">
+<div class="card-content">
+<h3>${jogo.nome}</h3>
+<p>${jogo.descricao}</p>
+<a href="${jogo.link}" target="_blank">
+Abrir
+</a>
+</div>
+</div>
+`;
+
+});
+
+}
+
+const music = document.getElementById("music");
+
+function toggleMusic(){
+if(music.paused){
+music.play();
+}else{
+music.pause();
+}
+}
+
+renderizarJogos();
+
+</script>
 
 </body>
 </html>
