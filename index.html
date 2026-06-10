@@ -398,19 +398,25 @@ function animateBoombox() {
 
     analyser.getByteFrequencyData(dataArray);
 
-    let sum = 0;
+    let bass = 0;
 
-    for(let i = 0; i < dataArray.length; i++){
-        sum += dataArray[i];
+    // pega só os graves
+    for(let i = 0; i < 15; i++){
+        bass += dataArray[i];
     }
 
-    const average = sum / dataArray.length;
+    bass /= 15;
 
-    const scale = 1 + average / 150;
+    let scale = 1;
+
+    if(bass > 90){
+        scale = 1.15;
+    }
 
     boombox.style.transform = `scale(${scale})`;
 
     requestAnimationFrame(animateBoombox);
+}
 }
 
 function toggleMusic(){
